@@ -1,5 +1,5 @@
 {
-  "name": "with-firebase-hosting-and-typescript",
+  "name": "mahjong-result-management-ui",
   "version": "1.0.0",
   "description": "Host Next.js SSR app on Firebase Cloud Functions with Firebase Hosting redirects. Built with typescript.",
   "engines": {

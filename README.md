@@ -1,33 +1,8 @@
-# With Firebase Hosting and Typescript example
-
-The goal is to host the Next.js app on Firebase Cloud Functions with Firebase Hosting rewrite rules so our app is served from our Firebase Hosting URL, with a complete Typescript stack for both the Next app and for the Firebase Functions. Each individual `page` bundle is served in a new call to the Cloud Function which performs the initial server render.
-
-This is based off of the work of @jthegedus in the [with-firebase-hosting](https://github.com/zeit/next.js/tree/canary/examples/with-firebase-hosting) example.
-
-If you're having issues, feel free to tag @sampsonjoliver in the [issue you create on the next.js repo](https://github.com/zeit/next.js/issues/new)
+# mahjong result management ui
 
 ## How to use
 
-### Using `create-next-app`
-
-Execute [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-```bash
-npm init next-app --example with-firebase-hosting-and-typescript with-firebase-hosting-and-typescript-app
-# or
-yarn create next-app --example with-firebase-hosting-and-typescript with-firebase-hosting-and-typescript-app
-```
-
-### Download manually
-
-Download the example:
-
-```bash
-curl https://codeload.github.com/zeit/next.js/tar.gz/canary | tar -xz --strip=2 next.js-canary/examples/with-firebase-hosting-and-typescript
-cd with-firebase-hosting-and-typescript
-```
-
-Set up firebase:
+#### Set up firebase:
 
 - install Firebase Tools: `npm i -g firebase-tools`
 - create a project through the [firebase web console](https://console.firebase.google.com/)
