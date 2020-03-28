@@ -3,6 +3,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import App from 'next/app';
 import Head from 'next/head';
 import React from 'react';
+import { UserProvider } from '../lib/firebaseClient';
 import theme from '../theme';
 
 export default class MyApp extends App {
@@ -23,11 +24,13 @@ export default class MyApp extends App {
           <title>My page</title>
           <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width' />
         </Head>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
+        <UserProvider>
+          <ThemeProvider theme={theme}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </UserProvider>
       </React.Fragment>
     );
   }
