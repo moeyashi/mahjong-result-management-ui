@@ -1,12 +1,9 @@
-import Link from 'next/link';
+import { AppBar, Toolbar } from '@material-ui/core';
 
-export default ({ pathname }: { pathname?: any }) => (
-  <header>
-    <Link href='/'>
-      <a className={pathname === '/' ? 'is-active' : ''}>Home</a>
-    </Link>
-    <Link href='/about'>
-      <a className={pathname === '/about' ? 'is-active' : ''}>About</a>
-    </Link>
-  </header>
+export default ({ }: { pathname?: any }) => (
+  <AppBar>
+    <Toolbar>
+      Title
+    </Toolbar>
+  </AppBar>
 );

@@ -1,9 +1,13 @@
+import { Container, Toolbar } from '@material-ui/core';
 import Header from './Header';
 
 const App = ({ children }: { children?: any }) => (
   <main>
     <Header />
-    {children}
+    <Toolbar />
+    <Container>
+      {children}
+    </Container>
   </main>
 );
 
