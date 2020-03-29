@@ -1,8 +1,8 @@
-// import 'firebase/firestore' // If you need it
 // import 'firebase/storage' // If you need it
 import 'firebase/analytics'; // If you need it
 import firebase from 'firebase/app';
 import 'firebase/auth'; // If you need it
+import 'firebase/firestore'; // If you need it
 import { createContext, useContext, useEffect, useState } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
@@ -17,9 +17,11 @@ const clientCredentials = {
   measurementId: 'G-VD4ZDKJLMQ',
 };
 
+export let firebaseDb: firebase.firestore.Firestore;
 // Check that `window` is in scope for the analytics module!
 if (typeof window !== 'undefined' && !firebase.apps.length) {
   firebase.initializeApp(clientCredentials);
+  firebaseDb = firebase.firestore();
   // To enable analytics. https://firebase.google.com/docs/analytics/get-started
   if ('measurementId' in clientCredentials) { firebase.analytics(); }
 }
@@ -68,7 +70,7 @@ export const UserProvider = ({ children }) => {
 // Custom hook that shorhands the context!
 export const useUser = () => useContext(UserContext);
 
-const uiConfig = {
+const uiConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
   signInSuccessUrl: '/',
   signInOptions: [

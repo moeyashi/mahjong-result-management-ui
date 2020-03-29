@@ -14,7 +14,20 @@ const theme = createMuiTheme({
       main: red.A400,
     },
     background: {
-      default: '#fff',
+      paper: '#fafafa',
+      default: '#eeeeee',
+    },
+  },
+  typography: {
+    h1: {
+      fontSize: '4rem',
+      lineHeight: 1.5,
+    },
+  },
+  props: {
+    MuiButton: {
+      color: 'primary',
+      variant: 'contained',
     },
   },
 });

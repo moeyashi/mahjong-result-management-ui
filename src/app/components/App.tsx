@@ -1,4 +1,4 @@
-import { Container, Dialog, LinearProgress, Toolbar } from '@material-ui/core';
+import { Container, Toolbar } from '@material-ui/core';
 import { SignInScreen, useUser } from '../lib/firebaseClient';
 import Header from './Header';
 
@@ -6,11 +6,7 @@ const App = ({ children }: { children?: any }) => {
   const { user, loadingUser } = useUser();
 
   if (loadingUser) {
-    return (
-      <Dialog open={true} fullScreen={true}>
-        <LinearProgress />
-      </Dialog>
-    );
+    return <p>loading</p>;
   }
 
   if (!user) {

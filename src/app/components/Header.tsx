@@ -1,14 +1,11 @@
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
-import { useUser } from '../lib/firebaseClient';
 
 export default ({ }: { pathname?: any }) => {
-  const { user } = useUser();
 
   return (
     <AppBar>
       <Toolbar>
-        <Typography>Title</Typography>
-        <Typography>{user?.displayName}</Typography>
+        <Typography>成績管理</Typography>
       </Toolbar>
     </AppBar>
   );

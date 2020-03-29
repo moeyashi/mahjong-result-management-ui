@@ -2,6 +2,7 @@
   "name": "mahjong-result-management-ui",
   "version": "1.0.0",
   "description": "Host Next.js SSR app on Firebase Cloud Functions with Firebase Hosting redirects. Built with typescript.",
+  "license": "UNLICENSED",
   "engines": {
     "node": "10"
   },
@@ -50,6 +51,6 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["tslint --fix", "git add"]
+    "*.{js,jsx,ts,tsx}": ["tslint --project src/app --fix", "git add"]
   }
 }
