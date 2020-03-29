@@ -4,6 +4,7 @@ import 'firebase/analytics'; // If you need it
 import firebase from 'firebase/app';
 import 'firebase/auth'; // If you need it
 import { createContext, useContext, useEffect, useState } from 'react';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 const clientCredentials = {
   apiKey: 'AIzaSyAx07Fn5PNaoHlT7mDPjO_KunhMmsBRBrM',
@@ -66,3 +67,25 @@ export const UserProvider = ({ children }) => {
 
 // Custom hook that shorhands the context!
 export const useUser = () => useContext(UserContext);
+
+const uiConfig = {
+  signInFlow: 'popup',
+  signInSuccessUrl: '/',
+  signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+      firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+      // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+      firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+      // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+  ],
+};
+
+export const SignInScreen = () => {
+  return (
+    <div>
+      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+    </div>
+  );
+};

@@ -1,10 +1,8 @@
 import { Container, Dialog, LinearProgress, Toolbar } from '@material-ui/core';
-import { useRouter } from 'next/router';
-import { useUser } from '../lib/firebaseClient';
+import { SignInScreen, useUser } from '../lib/firebaseClient';
 import Header from './Header';
 
 const App = ({ children }: { children?: any }) => {
-  const router = useRouter();
   const { user, loadingUser } = useUser();
 
   if (loadingUser) {
@@ -16,11 +14,12 @@ const App = ({ children }: { children?: any }) => {
   }
 
   if (!user) {
-    router.push('/login');
     return (
-      <Dialog open={true} fullScreen={true}>
-        <LinearProgress />
-      </Dialog>
+      <main>
+        <Header />
+        <Toolbar />
+        <SignInScreen />
+      </main>
     );
   }
 
