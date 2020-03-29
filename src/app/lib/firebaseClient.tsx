@@ -7,14 +7,14 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 const clientCredentials = {
-  apiKey: 'AIzaSyAx07Fn5PNaoHlT7mDPjO_KunhMmsBRBrM',
-  authDomain: 'free-242007.firebaseapp.com',
-  databaseURL: 'https://free-242007.firebaseio.com',
-  projectId: 'free-242007',
-  storageBucket: 'free-242007.appspot.com',
-  messagingSenderId: '897557736055',
-  appId: '1:897557736055:web:7ae0de328023124a',
-  measurementId: 'G-XVDY8MFWE5',
+  apiKey: "AIzaSyDlHyhD4WZZOHsV_mA9DlBLJl9v7FHq5QM",
+  authDomain: "mahjong-7374d.firebaseapp.com",
+  databaseURL: "https://mahjong-7374d.firebaseio.com",
+  projectId: "mahjong-7374d",
+  storageBucket: "mahjong-7374d.appspot.com",
+  messagingSenderId: "367309424099",
+  appId: "1:367309424099:web:a914b87378838a48720cd6",
+  measurementId: "G-VD4ZDKJLMQ"
 };
 
 // Check that `window` is in scope for the analytics module!
