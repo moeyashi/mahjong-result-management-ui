@@ -1,0 +1,24 @@
+name: deploy
+on:
+  push:
+    barnches:
+    - master
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+    - name: Cache Node.js modules
+      uses: actions/cache@v1
+      with:
+        path: ~/.cache/yarn
+        key: ${{ runner.OS }}-mahjong-result-management-ui-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+        restore-keys: |
+          ${{ runner.OS }}-mahjong-result-management-ui-
+    - run: yarn --frozen-lockfile
+    - run: yarn deploy -- $FIREBASE_TOKEN
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
