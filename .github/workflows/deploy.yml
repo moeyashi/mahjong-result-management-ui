@@ -19,6 +19,6 @@ jobs:
         restore-keys: |
           ${{ runner.OS }}-mahjong-result-management-ui-
     - run: yarn --frozen-lockfile
-    - run: yarn deploy -- $FIREBASE_TOKEN
+    - run: yarn deploy --token $FIREBASE_TOKEN
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
