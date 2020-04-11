@@ -1,11 +1,11 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Grid, TextField, Typography } from '@material-ui/core';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import App from '../components/App';
-import { firebaseDb, useUser } from '../lib/firebaseClient';
+import { useRooms } from '../hooks';
 
 const RoomGridItem = ({key, title, ...props}) => (
-  <Grid item={true} key={key} {...props} xs={12} sm={6} md={4} lg={3}>
+  <Grid item={true} {...props} key={key} xs={12} sm={6} md={4} lg={3}>
     <Card>
       <CardHeader
         title={title}
@@ -19,42 +19,22 @@ const RoomGridItem = ({key, title, ...props}) => (
 );
 
 export default () => {
-  const router = useRouter();
-  const { user } = useUser();
-  const [isRoomsLoading, setIsRoomsLoading] = useState(true);
-  const [rooms, setRooms] = useState<firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>>();
+  // const router = useRouter();
+  const { rooms, loadingRooms, fetchRooms, addRoom } = useRooms();
   const [newRoomName, setNewRoomName] = useState<string>('');
   const [newRoomError, setNewRoomError] = useState<string>('');
   useEffect(() => {
-    let unmounted = false;
-    const f = async () => {
-      const newRooms = await firebaseDb.collection('rooms').get();
-      if (!unmounted) {
-        setRooms(newRooms);
-        setIsRoomsLoading(false);
-      }
-    };
-    f();
-    const cleanup = () => {
-      unmounted = true;
-    };
-    return cleanup;
+    fetchRooms();
   }, []);
   const handleNewRoomNameChange = (e) => { setNewRoomName(e.target.value); };
   const handleAddRoomClick = async () => {
-    const check = await firebaseDb.collection('rooms').where('name', '==', newRoomName).get();
-    if (check.empty) {
-      await firebaseDb.collection('rooms').add({
-        name: newRoomName,
-        created_at: Date.now(),
-        created_by: user?.uid,
-      });
-      router.reload();
-    } else {
-      setNewRoomError('Room name is duplicated');
+    try {
+      await addRoom(newRoomName);
+    } catch (e) {
+      setNewRoomError(e.toString());
     }
   };
-  if (isRoomsLoading) {
+  if (loadingRooms) {
     return <p>loading</p>;
   }
 
@@ -62,7 +42,7 @@ export default () => {
     <App>
       <Typography variant='h1'>Rooms</Typography>
       <Grid container={true} spacing={1}>
-        {rooms?.docs?.map((room) => <RoomGridItem key={room.id} title={room.data().name} />)}
+        {rooms?.map((room) => <RoomGridItem key={room.id} title={room.name} />)}
         <Grid item={true} key={'index-rooms-new'} xs={12}>
           <Card>
             <CardHeader
