@@ -4,7 +4,7 @@ import firebase from '../../lib/firebaseClient';
 import { Room } from '../model';
 
 export interface IRoomInteractor {
-  list(): Promise<Room[]>;
+  list(uid?: string): Promise<Room[]>;
   add(roomName: string): Promise<Room>;
 }
 
@@ -32,8 +32,7 @@ export class RoomInteractor implements IRoomInteractor {
     });
   }
 
-  public async list() {
-    const uid = firebase.auth().currentUser?.uid;
+  public async list(uid?: string) {
     if (!uid) {
       return new Promise<Room[]>((resolve) => resolve([]));
     }

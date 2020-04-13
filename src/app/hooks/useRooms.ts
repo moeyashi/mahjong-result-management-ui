@@ -1,27 +1,24 @@
-import { useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import useSWR from 'swr';
 import { RoomRepositoryImpl } from '../di';
-import { Room } from '../domain/model';
 import { RoomInteractor } from '../domain/usecase';
+import firebase from '../lib/firebaseClient';
 
 const roomInteractor = new RoomInteractor(RoomRepositoryImpl);
 
 export const useRooms = () => {
-  const [rooms, setRooms] = useState<Room[]>([]);
-  const [loadingRooms, setLoadingRooms] = useState(false);
-  const fetchRooms = async () => {
-    setLoadingRooms(true);
-    setRooms(await roomInteractor.list());
-    setLoadingRooms(false);
-  };
+  const [ user ] = useAuthState(firebase.auth());
+  const { data, mutate } = useSWR(['result', user], () => roomInteractor.list(user?.uid));
   const addRoom = async (roomName: string) => {
+    if (typeof data === 'undefined') {
+      throw new Error('data is loading');
+    }
     const addedRoom = await roomInteractor.add(roomName);
-    setRooms([...rooms, addedRoom]);
-    await fetchRooms();
+    mutate([...data, addedRoom]);
   };
   return {
-    rooms,
-    loadingRooms,
-    fetchRooms,
+    rooms: data,
+    loadingRooms: !data,
     addRoom,
   };
 };

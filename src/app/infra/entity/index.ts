@@ -1,3 +1,4 @@
 export * from './EntityBase';
-export * from './UserEntity';
 export * from './RoomEntity';
+export * from './ResultEntity';
+export * from './ResultSetEntity';

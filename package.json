@@ -7,7 +7,7 @@
     "node": "10"
   },
   "scripts": {
-    "dev": "next src/app",
+    "dev": "cross-env NODE_OPTIONS='--inspect' next src/app",
     "preserve": "npm run build-public && npm run build-functions && npm run build-app && npm run copy-deps && npm run install-deps",
     "serve": "cross-env NODE_ENV=production firebase serve",
     "deploy": "cross-env NODE_ENV=production firebase deploy",
@@ -29,7 +29,9 @@
     "next": "9.2.1",
     "react": "16.8.6",
     "react-dom": "16.8.6",
-    "react-firebaseui": "^4.1.0"
+    "react-firebase-hooks": "^2.1.1",
+    "react-firebaseui": "^4.1.0",
+    "swr": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "12.0.12",
@@ -51,6 +53,9 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["tslint --project src/app --fix", "git add"]
+    "*.{js,jsx,ts,tsx}": [
+      "tslint --project src/app --fix",
+      "git add"
+    ]
   }
 }
