@@ -12,8 +12,8 @@
   "functions": {
     "source": ".",
     "predeploy": [
-      "npm install",
-      "npm run build"
+      "yarn",
+      "yarn build"
     ]
   }
 }
