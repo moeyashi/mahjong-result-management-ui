@@ -1,25 +1,22 @@
-import Header from './Header'
-import ItemList from './ItemList'
-import Item from '../models/item'
+import { Header } from "./Header";
 
-import React from 'react'
-import firebase from 'firebase'
-import '@firebase/firestore'
-import * as Ballcap from '@1amageek/ballcap'
-import config from '../firebase-config'
+import React, { FC } from "react";
+import firebase from "firebase";
+import "@firebase/firestore";
+import * as Ballcap from "@1amageek/ballcap";
+import config from "../firebase-config";
 
-if(firebase.apps.length === 0) {
-  Ballcap.initialize(firebase.initializeApp(config).firestore())
+if (firebase.apps.length === 0) {
+  Ballcap.initialize(firebase.initializeApp(config).firestore());
 }
 
-const App = ({ children }: { children?: any }) => {
-	const item = new Item()
-	return (
-		<main>
-			<Header />
-			{children}
-		</main>
-	)
-}
+const App: FC<{ children?: any }> = ({ children }) => {
+  return (
+    <main>
+      <Header />
+      {children}
+    </main>
+  );
+};
 
-export default App
+export default App;

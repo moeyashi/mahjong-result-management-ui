@@ -1,9 +1,10 @@
-import App from '../components/App'
-import ItemList from '../components/ItemList'
+import App from "../components/App";
+import { NextPage } from "next";
 
-export default () => (
+const Index: NextPage = () => (
   <App>
     <p>Index Page</p>
-    <ItemList />
   </App>
-)
+);
+
+export default Index;
