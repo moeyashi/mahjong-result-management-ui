@@ -18,6 +18,8 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
+    "@material-ui/core": "^4.9.13",
+    "@material-ui/lab": "^4.0.0-alpha.52",
     "firebase": "^7.14.3",
     "firebase-admin": "^8.9.0",
     "firebase-functions": "^3.3.0",
