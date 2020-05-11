@@ -7,10 +7,22 @@ import {
   TableCell,
   TableBody,
   TableRow,
+  Card,
+  CardHeader,
+  CardContent,
+  Button,
 } from "@material-ui/core";
 
 const ResultTable: FC = () => {
-  const { players, results } = useGroup();
+  const { group, players, results } = useGroup();
+
+  const handleClear = async (): Promise<void> => {
+    if (!group) {
+      alert("クリアに失敗");
+      return;
+    }
+    group.reset();
+  };
   const playerNames = results.reduce((ret: { [key: string]: string }, r) => {
     const ids = [
       r.eastPlayerId,
@@ -25,38 +37,67 @@ const ResultTable: FC = () => {
     });
     return ret;
   }, {});
+  const sum = results.reduce((ret: { [key: string]: number }, r) => {
+    const points: [string, number][] = [
+      [r.eastPlayerId, r.eastPoint],
+      [r.westPlayerId, r.westPoint],
+      [r.northPlayerId, r.northPoint],
+      [r.southPlayerId, r.southPoint],
+    ];
+    points.forEach(([id, point]) => {
+      if (!ret[id]) {
+        ret[id] = point;
+      }
+    });
+    return ret;
+  }, {});
 
   return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {Object.entries(playerNames).map(([k, v]) => (
-              <TableCell key={k}>{v}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {results.map((r) => {
-            const pMap = {
-              [r.eastPlayerId]: r.eastPoint,
-              [r.westPlayerId]: r.westPoint,
-              [r.northPlayerId]: r.northPoint,
-              [r.southPlayerId]: r.southPoint,
-            };
-            return (
-              <TableRow key={r.ref.path}>
-                {Object.keys(playerNames).map((k) => (
-                  <TableCell key={`${r.ref.path}-${k}`}>
-                    {typeof pMap[k] === "undefined" ? "" : pMap[k]}
-                  </TableCell>
+    <Card>
+      <CardHeader
+        title="結果"
+        subheader={Object.entries(sum)
+          .map(([k, v]) => `${playerNames[k]}: ${v}`)
+          .join(", ")}
+        action={
+          <Button variant="outlined" onClick={handleClear}>
+            clear
+          </Button>
+        }
+      />
+      <CardContent>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {Object.entries(playerNames).map(([k, v]) => (
+                  <TableCell key={k}>{v}</TableCell>
                 ))}
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+            </TableHead>
+            <TableBody>
+              {results.map((r) => {
+                const pMap = {
+                  [r.eastPlayerId]: r.eastPoint,
+                  [r.westPlayerId]: r.westPoint,
+                  [r.northPlayerId]: r.northPoint,
+                  [r.southPlayerId]: r.southPoint,
+                };
+                return (
+                  <TableRow key={r.ref.path}>
+                    {Object.keys(playerNames).map((k) => (
+                      <TableCell key={`${r.ref.path}-${k}`}>
+                        {typeof pMap[k] === "undefined" ? "" : pMap[k]}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </CardContent>
+    </Card>
   );
 };
 

@@ -5,7 +5,7 @@ import { FC } from "react";
 import Player from "../../models/Player";
 
 const PlayerInput: FC<Partial<AutocompleteProps<Player>>> = (props) => {
-  const { players } = useGroup();
+  const { players, loadingPlayers } = useGroup();
   const getOptionLabel = (player: Player): string => player.name;
   return (
     <Autocomplete<Player>
@@ -15,6 +15,8 @@ const PlayerInput: FC<Partial<AutocompleteProps<Player>>> = (props) => {
         <TextField {...params} label="対局者" />
       )}
       getOptionLabel={getOptionLabel}
+      disabled={loadingPlayers}
+      placeholder={loadingPlayers ? "読み込み中..." : ""}
       {...props}
     />
   );

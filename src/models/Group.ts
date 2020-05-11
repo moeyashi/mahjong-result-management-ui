@@ -80,4 +80,13 @@ export default class Group {
     });
     return Result.fromSnap(await result.get());
   }
+
+  public async reset(): Promise<void> {
+    const batch = firestore.batch();
+    const players = await this.players.get();
+    const results = await this.results.get();
+    players.forEach((doc) => batch.delete(doc.ref));
+    results.forEach((doc) => batch.delete(doc.ref));
+    await batch.commit();
+  }
 }
