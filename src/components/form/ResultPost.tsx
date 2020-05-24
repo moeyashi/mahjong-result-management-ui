@@ -10,12 +10,10 @@ import {
 } from "@material-ui/core";
 import PlayerInput from "./PlayerInput";
 import PointInput from "./PointInput";
-import { useRecoilValue } from "recoil";
-import { groupState, playersState } from "hooks/states/groupState";
+import { useAddResult } from "hooks/useAddResult";
 
 const ResultPost: FC = () => {
-  const group = useRecoilValue(groupState);
-  const players = useRecoilValue(playersState);
+  const postResult = useAddResult();
   const formRef = useRef<HTMLFormElement>();
 
   const handleKeyUp = (e: KeyboardEvent<HTMLDivElement>, id: string): void => {
@@ -34,12 +32,7 @@ const ResultPost: FC = () => {
     }
   };
   const handleClick = async (): Promise<void> => {
-    if (!group) {
-      alert("登録に失敗しました。");
-      return;
-    }
-    await group.addResult(
-      players,
+    await postResult(
       (formRef.current?.elements.namedItem("player1") as HTMLInputElement)
         .value,
       (formRef.current?.elements.namedItem("player2") as HTMLInputElement)

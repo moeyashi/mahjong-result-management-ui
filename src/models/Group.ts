@@ -1,5 +1,4 @@
 import { firestore } from "../lib/firebase";
-import Result from "./Result";
 import Player from "./Player";
 
 export default class Group {
@@ -42,43 +41,15 @@ export default class Group {
     return Player.fromSnap(await result.get());
   }
 
-  public async getOrCreatePlayer(
+  public getOrCreatePlayer(
     players: Player[],
     name: string
-  ): Promise<Player> {
+  ): { new: boolean; player: Player } {
     const gotPlayer = players.find((p) => p.name === name);
     if (gotPlayer) {
-      return gotPlayer;
+      return { new: false, player: gotPlayer };
     }
-    return await this.addPlayer(name);
-  }
-
-  public async addResult(
-    players: Player[],
-    eastPlayerName: string,
-    westPlayerName: string,
-    northPlayerName: string,
-    southPlayerName: string,
-    eastPoint: number,
-    westPoint: number,
-    northPoint: number,
-    southPoint: number
-  ): Promise<Result> {
-    const eastPlayer = await this.getOrCreatePlayer(players, eastPlayerName);
-    const westPlayer = await this.getOrCreatePlayer(players, westPlayerName);
-    const northPlayer = await this.getOrCreatePlayer(players, northPlayerName);
-    const southPlayer = await this.getOrCreatePlayer(players, southPlayerName);
-    const result = await this.results.add({
-      eastPlayerId: eastPlayer.id,
-      westPlayerId: westPlayer.id,
-      northPlayerId: northPlayer.id,
-      southPlayerId: southPlayer.id,
-      eastPoint,
-      westPoint,
-      northPoint,
-      southPoint,
-    });
-    return Result.fromSnap(await result.get());
+    return { new: true, player: new Player(this.players.doc(), name) };
   }
 
   public async reset(): Promise<void> {

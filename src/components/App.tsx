@@ -52,6 +52,7 @@ const App: FC<{ children: ReactNode }> = ({ children }) => {
       .collection("groups")
       .doc(groupID)
       .collection("results")
+      .orderBy("updatedAt")
       .onSnapshot((snap) => {
         setLoadingResults(false);
         setResults(snap.docs.map((doc) => Result.fromSnap(doc)));
