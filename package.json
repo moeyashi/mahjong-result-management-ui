@@ -24,7 +24,7 @@
     "next": "9.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "recoil": "^0.0.7"
+    "recoil": "../../official/Recoil/recoil-v0.0.7.tgz"
   },
   "devDependencies": {
     "@types/node": "^14.0.5",

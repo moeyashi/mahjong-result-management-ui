@@ -1,7 +1,7 @@
 import Group from "models/Group";
 import Player from "models/Player";
 import Result from "models/Result";
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
 
 export const groupIDState = atom({
   key: "groupIDState",
@@ -34,6 +34,48 @@ export const resultsState = atom<Result[]>({
   key: "resultsState",
   default: [],
   dangerouslyAllowMutability: true,
+});
+
+export const resultPlayerNames = selector({
+  key: "resultPlayerNames",
+  get: ({ get }) => {
+    const players = get(playersState);
+    return get(resultsState).reduce((ret: { [key: string]: string }, r) => {
+      const ids = [
+        r.eastPlayerId,
+        r.westPlayerId,
+        r.northPlayerId,
+        r.southPlayerId,
+      ];
+      ids.forEach((id) => {
+        if (!ret[id]) {
+          ret[id] = players.find((p) => p.id === id)?.name || "";
+        }
+      });
+      return ret;
+    }, {});
+  },
+});
+
+export const resultSummaryState = selector({
+  key: "resultSummaryState",
+  get: ({ get }) =>
+    get(resultsState).reduce((ret: { [key: string]: number }, r) => {
+      const points: [string, number][] = [
+        [r.eastPlayerId, r.eastPoint],
+        [r.westPlayerId, r.westPoint],
+        [r.northPlayerId, r.northPoint],
+        [r.southPlayerId, r.southPoint],
+      ];
+      points.forEach(([playerId, point]) => {
+        if (!ret[playerId]) {
+          ret[playerId] = point;
+        } else {
+          ret[playerId] += point;
+        }
+      });
+      return ret;
+    }, {}),
 });
 
 export const loadingResultsState = atom({

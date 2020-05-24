@@ -14,14 +14,16 @@ import {
 import { useRecoilValue } from "recoil";
 import {
   groupState,
-  playersState,
   resultsState,
+  resultSummaryState,
+  resultPlayerNames,
 } from "hooks/states/groupState";
 
 const ResultTable: FC = () => {
   const group = useRecoilValue(groupState);
-  const players = useRecoilValue(playersState);
   const results = useRecoilValue(resultsState);
+  const playerNames = useRecoilValue(resultPlayerNames);
+  const sum = useRecoilValue(resultSummaryState);
 
   const handleClear = async (): Promise<void> => {
     if (!group) {
@@ -30,34 +32,6 @@ const ResultTable: FC = () => {
     }
     group.reset();
   };
-  const playerNames = results.reduce((ret: { [key: string]: string }, r) => {
-    const ids = [
-      r.eastPlayerId,
-      r.westPlayerId,
-      r.northPlayerId,
-      r.southPlayerId,
-    ];
-    ids.forEach((id) => {
-      if (!ret[id]) {
-        ret[id] = players.find((p) => p.id === id)?.name || "";
-      }
-    });
-    return ret;
-  }, {});
-  const sum = results.reduce((ret: { [key: string]: number }, r) => {
-    const points: [string, number][] = [
-      [r.eastPlayerId, r.eastPoint],
-      [r.westPlayerId, r.westPoint],
-      [r.northPlayerId, r.northPoint],
-      [r.southPlayerId, r.southPoint],
-    ];
-    points.forEach(([id, point]) => {
-      if (!ret[id]) {
-        ret[id] = point;
-      }
-    });
-    return ret;
-  }, {});
 
   return (
     <Card>
