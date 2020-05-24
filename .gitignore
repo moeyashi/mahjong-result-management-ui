@@ -1,7 +1,9 @@
 node_modules/
+.env
 
 # NextJs build
 .next/
+out/
 
 # Firebase cache
 .firebase/

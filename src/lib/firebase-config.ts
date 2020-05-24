@@ -1,10 +1,10 @@
 export default {
-  apiKey: "AIzaSyDlHyhD4WZZOHsV_mA9DlBLJl9v7FHq5QM",
-  authDomain: "mahjong-7374d.firebaseapp.com",
-  databaseURL: "https://mahjong-7374d.firebaseio.com",
-  projectId: "mahjong-7374d",
-  storageBucket: "mahjong-7374d.appspot.com",
-  messagingSenderId: "367309424099",
-  appId: "1:367309424099:web:a914b87378838a48720cd6",
-  measurementId: "G-VD4ZDKJLMQ",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };

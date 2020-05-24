@@ -10,7 +10,8 @@ import {
 } from "@material-ui/core";
 import PlayerInput from "./PlayerInput";
 import PointInput from "./PointInput";
-import useGroup from "../../hooks/useGroup";
+import { useRecoilValue } from "recoil";
+import { groupState, playersState } from "hooks/states/groupState";
 
 type Values = {
   eastPlayerName: string;
@@ -24,7 +25,8 @@ type Values = {
 };
 
 const ResultPost: FC = () => {
-  const { group, players } = useGroup();
+  const group = useRecoilValue(groupState);
+  const players = useRecoilValue(playersState);
   const [values, setValues] = useState<Values>({
     eastPlayerName: "",
     westPlayerName: "",

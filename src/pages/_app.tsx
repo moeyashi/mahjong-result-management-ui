@@ -4,7 +4,7 @@ import { AppProps } from "next/app";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../theme";
-import { GroupProvider } from "../hooks/useGroup";
+import { RecoilRoot } from "recoil";
 
 const MyApp: FC<AppProps> = (props) => {
   const { Component, pageProps } = props;
@@ -29,9 +29,9 @@ const MyApp: FC<AppProps> = (props) => {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <GroupProvider>
+        <RecoilRoot>
           <Component {...pageProps} />
-        </GroupProvider>
+        </RecoilRoot>
       </ThemeProvider>
     </React.Fragment>
   );

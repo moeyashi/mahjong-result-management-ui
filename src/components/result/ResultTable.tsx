@@ -1,5 +1,4 @@
 import { FC } from "react";
-import useGroup from "../../hooks/useGroup";
 import {
   Table,
   TableContainer,
@@ -12,9 +11,17 @@ import {
   CardContent,
   Button,
 } from "@material-ui/core";
+import { useRecoilValue } from "recoil";
+import {
+  groupState,
+  playersState,
+  resultsState,
+} from "hooks/states/groupState";
 
 const ResultTable: FC = () => {
-  const { group, players, results } = useGroup();
+  const group = useRecoilValue(groupState);
+  const players = useRecoilValue(playersState);
+  const results = useRecoilValue(resultsState);
 
   const handleClear = async (): Promise<void> => {
     if (!group) {
