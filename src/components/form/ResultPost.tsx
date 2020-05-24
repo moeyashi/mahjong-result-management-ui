@@ -1,4 +1,4 @@
-import { FC, useState, ChangeEvent, ChangeEventHandler } from "react";
+import { FC, useRef, KeyboardEvent } from "react";
 import {
   Card,
   CardHeader,
@@ -13,57 +13,24 @@ import PointInput from "./PointInput";
 import { useRecoilValue } from "recoil";
 import { groupState, playersState } from "hooks/states/groupState";
 
-type Values = {
-  eastPlayerName: string;
-  westPlayerName: string;
-  northPlayerName: string;
-  southPlayerName: string;
-  eastPoint: number;
-  westPoint: number;
-  northPoint: number;
-  southPoint: number;
-};
-
 const ResultPost: FC = () => {
   const group = useRecoilValue(groupState);
   const players = useRecoilValue(playersState);
-  const [values, setValues] = useState<Values>({
-    eastPlayerName: "",
-    westPlayerName: "",
-    northPlayerName: "",
-    southPlayerName: "",
-    eastPoint: 0,
-    westPoint: 0,
-    northPoint: 0,
-    southPoint: 0,
-  });
+  const formRef = useRef<HTMLFormElement>();
 
-  const handleChangeEastPlayer = (_: ChangeEvent<{}>, value: string): void => {
-    values.eastPlayerName = value;
-    setValues({ ...values });
-  };
-  const handleChangeWestPlayer = (_: ChangeEvent<{}>, value: string): void => {
-    values.westPlayerName = value;
-    setValues({ ...values });
-  };
-  const handleChangeNorthPlayer = (_: ChangeEvent<{}>, value: string): void => {
-    values.northPlayerName = value;
-    setValues({ ...values });
-  };
-  const handleChangeSouthPlayer = (_: ChangeEvent<{}>, value: string): void => {
-    values.southPlayerName = value;
-    setValues({ ...values });
-  };
-  const handleChangePoint: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const id = e.target.id;
-    if (
-      id === "eastPoint" ||
-      id === "northPoint" ||
-      id === "southPoint" ||
-      id === "westPoint"
-    ) {
-      values[id] = parseFloat(e.target.value);
-      setValues({ ...values });
+  const handleKeyUp = (e: KeyboardEvent<HTMLDivElement>, id: string): void => {
+    if (e.keyCode === 13) {
+      const elements = formRef.current?.elements;
+      if (!elements) {
+        return;
+      }
+      const length = elements.length;
+      for (let i = 0; i < length; i++) {
+        if (elements[i].id === id) {
+          (elements[i] as HTMLInputElement).focus();
+          break;
+        }
+      }
     }
   };
   const handleClick = async (): Promise<void> => {
@@ -73,70 +40,107 @@ const ResultPost: FC = () => {
     }
     await group.addResult(
       players,
-      values.eastPlayerName,
-      values.westPlayerName,
-      values.northPlayerName,
-      values.southPlayerName,
-      values.eastPoint,
-      values.westPoint,
-      values.northPoint,
-      values.southPoint
+      (formRef.current?.elements.namedItem("player1") as HTMLInputElement)
+        .value,
+      (formRef.current?.elements.namedItem("player2") as HTMLInputElement)
+        .value,
+      (formRef.current?.elements.namedItem("player3") as HTMLInputElement)
+        .value,
+      (formRef.current?.elements.namedItem("player4") as HTMLInputElement)
+        .value,
+      parseFloat(
+        (formRef.current?.elements.namedItem("point1") as HTMLInputElement)
+          .value
+      ),
+      parseFloat(
+        (formRef.current?.elements.namedItem("point2") as HTMLInputElement)
+          .value
+      ),
+      parseFloat(
+        (formRef.current?.elements.namedItem("point3") as HTMLInputElement)
+          .value
+      ),
+      parseFloat(
+        (formRef.current?.elements.namedItem("point4") as HTMLInputElement)
+          .value
+      )
     );
   };
 
   return (
-    <Card>
+    <Card component="form" ref={formRef}>
       <CardHeader title="結果追加" />
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={6}>
             <PlayerInput
+              id="player1"
+              onKeyUp={(e) => handleKeyUp(e, "point1")}
               renderInput={(params): JSX.Element => (
                 <TextField {...params} label="player1" />
               )}
-              onInputChange={handleChangeEastPlayer}
             />
           </Grid>
           <Grid item xs={6}>
-            <PointInput id="eastPoint" onChange={handleChangePoint} />
+            <PointInput
+              id="point1"
+              onKeyUp={(e) => handleKeyUp(e, "player2")}
+            />
           </Grid>
           <Grid item xs={6}>
             <PlayerInput
+              id="player2"
+              onKeyUp={(e) => handleKeyUp(e, "point2")}
               renderInput={(params): JSX.Element => (
                 <TextField {...params} label="player2" />
               )}
-              onInputChange={handleChangeSouthPlayer}
             />
           </Grid>
           <Grid item xs={6}>
-            <PointInput id="southPoint" onChange={handleChangePoint} />
+            <PointInput
+              id="point2"
+              onKeyUp={(e) => handleKeyUp(e, "player3")}
+            />
           </Grid>
           <Grid item xs={6}>
             <PlayerInput
+              id="player3"
+              onKeyUp={(e) => handleKeyUp(e, "point3")}
               renderInput={(params): JSX.Element => (
                 <TextField {...params} label="player3" />
               )}
-              onInputChange={handleChangeWestPlayer}
             />
           </Grid>
           <Grid item xs={6}>
-            <PointInput id="westPoint" onChange={handleChangePoint} />
+            <PointInput
+              id="point3"
+              onKeyUp={(e) => handleKeyUp(e, "player4")}
+            />
           </Grid>
           <Grid item xs={6}>
             <PlayerInput
+              id="player4"
+              onKeyUp={(e) => handleKeyUp(e, "point4")}
               renderInput={(params): JSX.Element => (
                 <TextField {...params} label="player4" />
               )}
-              onInputChange={handleChangeNorthPlayer}
             />
           </Grid>
           <Grid item xs={6}>
-            <PointInput id="northPoint" onChange={handleChangePoint} />
+            <PointInput
+              id="point4"
+              onKeyUp={(e) => handleKeyUp(e, "submitResult")}
+            />
           </Grid>
         </Grid>
       </CardContent>
       <CardActions>
-        <Button color="primary" variant="contained" onClick={handleClick}>
+        <Button
+          id="submitResult"
+          color="primary"
+          variant="contained"
+          onClick={handleClick}
+        >
           登録
         </Button>
       </CardActions>
