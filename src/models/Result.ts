@@ -8,6 +8,9 @@ export default class Result {
     public readonly ref: firebase.firestore.DocumentReference<
       firebase.firestore.DocumentData
     >,
+    public startPoint: number,
+    public topPrize: number,
+    public rankBonus: [number, number, number, number],
     public eastPlayerId: string,
     public westPlayerId: string,
     public northPlayerId: string,
@@ -16,6 +19,7 @@ export default class Result {
     public westPoint: number,
     public northPoint: number,
     public southPoint: number,
+    // public //供託
     createdAt?: Date,
     updatedAt?: Date
   ) {
@@ -29,6 +33,9 @@ export default class Result {
     return {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      startPoint: this.startPoint,
+      topPrize: this.topPrize,
+      rankBonus: this.rankBonus,
       eastPlayerId: this.eastPlayerId,
       westPlayerId: this.westPlayerId,
       northPlayerId: this.northPlayerId,
@@ -48,6 +55,9 @@ export default class Result {
     const data = snap.data() || {};
     const ret = new Result(
       snap.ref,
+      data.startPoint,
+      data.topPrize,
+      data.rankBonus,
       data.eastPlayerId,
       data.westPlayerId,
       data.northPlayerId,
@@ -56,9 +66,30 @@ export default class Result {
       data.westPoint,
       data.northPoint,
       data.southPoint,
-      data.createdAt.toDate(),
-      data.updatedAt.toDate()
+      data.createdAt?.toDate(),
+      data.updatedAt?.toDate()
     );
     return ret;
+  }
+
+  public validate(): string {
+    const playerIds = new Set([
+      this.eastPlayerId,
+      this.northPlayerId,
+      this.southPlayerId,
+      this.westPlayerId,
+    ]);
+    if (Array.from(playerIds).some((id) => !id)) {
+      return "プレイヤー名に入力漏れがあります";
+    }
+    if (playerIds.size !== 4) {
+      return "プレイヤー名が重複しています";
+    }
+    const sum =
+      this.eastPoint + this.westPoint + this.southPoint + this.northPoint;
+    if (sum !== 100) {
+      return "合計得点が100になりません。" + sum;
+    }
+    return "";
   }
 }

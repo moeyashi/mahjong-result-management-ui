@@ -9,14 +9,26 @@ export const useAddResult = () => {
     async (
       { getPromise, set },
       eastPlayerName: string,
+      southPlayerName: string,
       westPlayerName: string,
       northPlayerName: string,
-      southPlayerName: string,
       eastPoint: number,
+      southPoint: number,
       westPoint: number,
-      northPoint: number,
-      southPoint: number
+      northPoint: number
     ) => {
+      const playerNames = new Set([
+        eastPlayerName,
+        westPlayerName,
+        northPlayerName,
+        southPlayerName,
+      ]);
+      if (Array.from(playerNames).some((id) => !id)) {
+        return "プレイヤー名に入力漏れがあります";
+      }
+      if (playerNames.size !== 4) {
+        return "プレイヤー名が重複しています";
+      }
       const group = await getPromise(groupState);
       if (!group) {
         throw new Error("グループが未取得");
@@ -31,6 +43,9 @@ export const useAddResult = () => {
       const [eastPlayer, westPlayer, northPlayer, southPlayer] = ps;
       const result = new Result(
         group.results.doc(),
+        25,
+        5,
+        [20, 10, -10, -20],
         eastPlayer.player.id,
         westPlayer.player.id,
         northPlayer.player.id,
@@ -40,6 +55,10 @@ export const useAddResult = () => {
         northPoint,
         southPoint
       );
+      const ng = result.validate();
+      if (ng) {
+        return ng;
+      }
 
       set(playersState, [
         ...players,

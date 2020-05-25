@@ -1,4 +1,4 @@
-import { FC, useRef, KeyboardEvent } from "react";
+import { FC, useRef, KeyboardEvent, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -7,6 +7,7 @@ import {
   TextField,
   Button,
   CardActions,
+  Typography,
 } from "@material-ui/core";
 import PlayerInput from "./PlayerInput";
 import PointInput from "./PointInput";
@@ -15,6 +16,7 @@ import { useAddResult } from "hooks/useAddResult";
 const ResultPost: FC = () => {
   const postResult = useAddResult();
   const formRef = useRef<HTMLFormElement>();
+  const [message, setMessage] = useState<string>();
 
   const handleKeyUp = (e: KeyboardEvent<HTMLDivElement>, id: string): void => {
     if (e.keyCode === 13) {
@@ -32,7 +34,7 @@ const ResultPost: FC = () => {
     }
   };
   const handleClick = async (): Promise<void> => {
-    await postResult(
+    const ng = await postResult(
       (formRef.current?.elements.namedItem("player1") as HTMLInputElement)
         .value,
       (formRef.current?.elements.namedItem("player2") as HTMLInputElement)
@@ -58,11 +60,15 @@ const ResultPost: FC = () => {
           .value
       )
     );
+    setMessage(ng);
   };
 
   return (
     <Card component="form" ref={formRef}>
-      <CardHeader title="結果追加" />
+      <CardHeader
+        title="結果追加"
+        subheader="25000持ち30000返し、ウマ10-20（同点時入力順） 得点は素点/1000を入力"
+      />
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={6}>
@@ -136,6 +142,7 @@ const ResultPost: FC = () => {
         >
           登録
         </Button>
+        <Typography color="error">{message}</Typography>
       </CardActions>
     </Card>
   );
