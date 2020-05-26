@@ -68,7 +68,7 @@ const ResultPost: FC = () => {
       <CardHeader
         title="結果追加"
         titleTypographyProps={{ variant: "h6" }}
-        subheader="25000持ち30000返し、ウマ10-20（同点時入力順） 得点は素点/1000を入力（28700なら28.7）"
+        subheader="得点は素点/1000を入力（28700なら28.7）"
         style={{ paddingTop: 8, paddingBottom: 8 }}
       />
       <CardContent style={{ paddingTop: 8, paddingBottom: 8 }}>

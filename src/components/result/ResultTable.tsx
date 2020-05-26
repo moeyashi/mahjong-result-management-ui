@@ -39,6 +39,7 @@ const ResultTable: FC = () => {
       <CardHeader
         title="結果"
         titleTypographyProps={{ variant: "h6" }}
+        subheader="25000持ち30000返し、ウマ10-20（同点時入力順）"
         action={
           <Button
             variant="outlined"
