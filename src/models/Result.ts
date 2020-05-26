@@ -111,7 +111,7 @@ export default class Result {
       .forEach(([_, p], idx) => {
         p.rankBonus = rankBonus[idx];
         p.order = idx + 1;
-        p.topPrize = idx === 0 ? topPrize * 4 : -1 * topPrize;
+        p.topPrize = idx === 0 ? topPrize * 3 : -1 * topPrize;
       });
     this.playerMap = playerMap;
   }

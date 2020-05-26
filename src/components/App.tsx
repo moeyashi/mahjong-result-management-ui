@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useEffect } from "react";
 import Header from "./Header";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
 import {
   groupState,
   groupIDState,
@@ -11,19 +11,45 @@ import {
   loadingResultsState,
 } from "hooks/states/groupState";
 import Group from "models/Group";
-import { firestore } from "lib/firebase";
+import firebase, { firestore } from "lib/firebase";
 import Player from "models/Player";
 import Result from "models/Result";
+import { Login } from "./Login";
 
 const App: FC<{ children: ReactNode }> = ({ children }) => {
-  const groupID = useRecoilValue(groupIDState);
+  const [groupID, setGroupID] = useRecoilState(groupIDState);
   const setGroup = useSetRecoilState(groupState);
   const setLoadingGroup = useSetRecoilState(loadingGroupState);
   const setPlayers = useSetRecoilState(playersState);
   const setLoadingPlayers = useSetRecoilState(loadingPlayersState);
   const setResults = useSetRecoilState(resultsState);
   const setLoadingResults = useSetRecoilState(loadingResultsState);
+
   useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        setGroupID("");
+        return;
+      }
+
+      const group = new Group(
+        firestore.collection("groups").doc(user.uid),
+        user.uid,
+        "",
+        user.uid
+      );
+      if (!(await group.ref.get()).exists) {
+        await group.create();
+      }
+      setGroupID(user.uid);
+    });
+    return () => unsubscribe();
+  }, [setGroupID]);
+
+  useEffect(() => {
+    if (!groupID) {
+      return;
+    }
     setLoadingGroup(true);
     const unsubsc = firestore
       .collection("groups")
@@ -34,7 +60,11 @@ const App: FC<{ children: ReactNode }> = ({ children }) => {
       });
     return () => unsubsc();
   }, [groupID, setGroup, setLoadingGroup]);
+
   useEffect(() => {
+    if (!groupID) {
+      return;
+    }
     setLoadingPlayers(true);
     const unsubsc = firestore
       .collection("groups")
@@ -46,7 +76,11 @@ const App: FC<{ children: ReactNode }> = ({ children }) => {
       });
     return () => unsubsc();
   }, [groupID, setPlayers, setLoadingPlayers]);
+
   useEffect(() => {
+    if (!groupID) {
+      return;
+    }
     setLoadingResults(true);
     const unsubsc = firestore
       .collection("groups")
@@ -59,10 +93,11 @@ const App: FC<{ children: ReactNode }> = ({ children }) => {
       });
     return () => unsubsc();
   }, [groupID, setResults, setLoadingResults]);
+
   return (
     <main>
       <Header />
-      {children}
+      {groupID ? children : <Login />}
     </main>
   );
 };

@@ -5,7 +5,7 @@ import { atom, selector } from "recoil";
 
 export const groupIDState = atom({
   key: "groupIDState",
-  default: "1",
+  default: "",
 });
 
 export const groupState = atom<Group | undefined>({

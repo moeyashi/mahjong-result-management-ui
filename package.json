@@ -24,6 +24,7 @@
     "next": "9.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-firebaseui": "^4.1.0",
     "recoil": "../../official/Recoil/recoil-v0.0.7.tgz"
   },
   "devDependencies": {

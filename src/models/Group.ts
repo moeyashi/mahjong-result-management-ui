@@ -15,7 +15,8 @@ export default class Group {
       firebase.firestore.DocumentData
     >,
     public readonly id: string,
-    public readonly name: string = ""
+    public readonly name: string = "",
+    public readonly ownerUid: string
   ) {
     this.players = ref.collection("players");
     this.results = ref.collection("results");
@@ -29,8 +30,15 @@ export default class Group {
     return this.fromSnap(snap);
   }
 
+  public async create(): Promise<void> {
+    await this.ref.set({
+      ownerUid: this.ownerUid,
+    });
+  }
+
   public static fromSnap(snap: firebase.firestore.DocumentSnapshot): Group {
-    const ret = new Group(snap.ref, snap.id, snap.data()?.name);
+    const d = snap.data();
+    const ret = new Group(snap.ref, snap.id, d?.name, d?.ownerUid);
     return ret;
   }
 
