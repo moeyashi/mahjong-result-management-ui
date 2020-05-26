@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardContent,
   Button,
+  TableFooter,
 } from "@material-ui/core";
 import { useRecoilValue } from "recoil";
 import {
@@ -37,44 +38,63 @@ const ResultTable: FC = () => {
     <Card>
       <CardHeader
         title="結果"
-        subheader={Object.entries(sum)
-          .map(([k, v]) => `${playerNames[k]}: ${v}`)
-          .join(", ")}
+        titleTypographyProps={{ variant: "h6" }}
         action={
-          <Button variant="outlined" onClick={handleClear}>
+          <Button
+            variant="outlined"
+            onClick={handleClear}
+            style={{ marginTop: 8 }}
+          >
             clear
           </Button>
         }
+        style={{ paddingTop: 8, paddingBottom: 8 }}
       />
-      <CardContent>
+      <CardContent style={{ paddingTop: 8, paddingBottom: 8 }}>
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
                 {Object.entries(playerNames).map(([k, v]) => (
-                  <TableCell key={k}>{v}</TableCell>
+                  <TableCell key={k}>
+                    {v} : {sum[k]?.toFixed(1)}
+                  </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
               {results.map((r) => {
                 const pMap = {
-                  [r.eastPlayerId]: r.eastPoint,
-                  [r.westPlayerId]: r.westPoint,
-                  [r.northPlayerId]: r.northPoint,
-                  [r.southPlayerId]: r.southPoint,
+                  [r.playerMap.east.id]: r.playerMap.east,
+                  [r.playerMap.west.id]: r.playerMap.west,
+                  [r.playerMap.south.id]: r.playerMap.south,
+                  [r.playerMap.north.id]: r.playerMap.north,
                 };
                 return (
                   <TableRow key={r.ref.path}>
                     {Object.keys(playerNames).map((k) => (
                       <TableCell key={`${r.ref.path}-${k}`}>
-                        {typeof pMap[k] === "undefined" ? "" : pMap[k]}
+                        {typeof pMap[k] === "undefined"
+                          ? ""
+                          : (
+                              pMap[k].point +
+                              pMap[k].rankBonus +
+                              pMap[k].topPrize -
+                              r.startPoint
+                            ).toFixed(1)}
                       </TableCell>
                     ))}
                   </TableRow>
                 );
               })}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                {Object.keys(playerNames).map((k) => (
+                  <TableCell key={k}>{sum[k]?.toFixed(1)}</TableCell>
+                ))}
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
       </CardContent>

@@ -67,9 +67,11 @@ const ResultPost: FC = () => {
     <Card component="form" ref={formRef}>
       <CardHeader
         title="結果追加"
-        subheader="25000持ち30000返し、ウマ10-20（同点時入力順） 得点は素点/1000を入力"
+        titleTypographyProps={{ variant: "h6" }}
+        subheader="25000持ち30000返し、ウマ10-20（同点時入力順） 得点は素点/1000を入力（28700なら28.7）"
+        style={{ paddingTop: 8, paddingBottom: 8 }}
       />
-      <CardContent>
+      <CardContent style={{ paddingTop: 8, paddingBottom: 8 }}>
         <Grid container spacing={1}>
           <Grid item xs={6}>
             <PlayerInput

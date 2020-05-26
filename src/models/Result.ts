@@ -1,24 +1,85 @@
 import firebase from "lib/firebase";
 
+export type PlayerResult = {
+  id: string;
+  point: number;
+  order: number;
+  rankBonus: number;
+  topPrize: number;
+  priority: number;
+};
+
+export type PlayerMap = {
+  east: PlayerResult;
+  west: PlayerResult;
+  south: PlayerResult;
+  north: PlayerResult;
+};
+
+const initPlayerMap = (
+  eastPlayerId: string,
+  westPlayerId: string,
+  northPlayerId: string,
+  southPlayerId: string,
+  eastPoint: number,
+  westPoint: number,
+  northPoint: number,
+  southPoint: number
+): PlayerMap => ({
+  east: {
+    id: eastPlayerId,
+    point: eastPoint,
+    order: 0,
+    rankBonus: 0,
+    topPrize: 0,
+    priority: 1,
+  },
+  south: {
+    id: southPlayerId,
+    point: southPoint,
+    order: 0,
+    rankBonus: 0,
+    topPrize: 0,
+    priority: 2,
+  },
+  west: {
+    id: westPlayerId,
+    point: westPoint,
+    order: 0,
+    rankBonus: 0,
+    topPrize: 0,
+    priority: 3,
+  },
+  north: {
+    id: northPlayerId,
+    point: northPoint,
+    order: 0,
+    rankBonus: 0,
+    topPrize: 0,
+    priority: 4,
+  },
+});
+
 export default class Result {
   public readonly id: string;
-  public createdAt: Date;
-  public updatedAt: Date;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
+  public readonly playerMap: PlayerMap;
   public constructor(
     public readonly ref: firebase.firestore.DocumentReference<
       firebase.firestore.DocumentData
     >,
-    public startPoint: number,
-    public topPrize: number,
-    public rankBonus: [number, number, number, number],
-    public eastPlayerId: string,
-    public westPlayerId: string,
-    public northPlayerId: string,
-    public southPlayerId: string,
-    public eastPoint: number,
-    public westPoint: number,
-    public northPoint: number,
-    public southPoint: number,
+    public readonly startPoint: number,
+    public readonly topPrize: number,
+    public readonly rankBonus: [number, number, number, number],
+    public readonly eastPlayerId: string,
+    public readonly westPlayerId: string,
+    public readonly northPlayerId: string,
+    public readonly southPlayerId: string,
+    public readonly eastPoint: number,
+    public readonly westPoint: number,
+    public readonly northPoint: number,
+    public readonly southPoint: number,
     // public //供託
     createdAt?: Date,
     updatedAt?: Date
@@ -27,6 +88,32 @@ export default class Result {
     const date = new Date();
     this.createdAt = createdAt || date;
     this.updatedAt = updatedAt || date;
+    const playerMap = initPlayerMap(
+      eastPlayerId,
+      westPlayerId,
+      northPlayerId,
+      southPlayerId,
+      eastPoint,
+      westPoint,
+      northPoint,
+      southPoint
+    );
+    Object.entries(playerMap)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .sort(([_, p1], [__, p2]) => {
+        const point = p2.point - p1.point;
+        if (point !== 0) {
+          return point;
+        }
+        return p1.priority - p2.priority;
+      })
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .forEach(([_, p], idx) => {
+        p.rankBonus = rankBonus[idx];
+        p.order = idx + 1;
+        p.topPrize = idx === 0 ? topPrize * 4 : -1 * topPrize;
+      });
+    this.playerMap = playerMap;
   }
 
   public documentData(): firebase.firestore.DocumentData {

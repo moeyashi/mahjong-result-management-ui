@@ -61,17 +61,11 @@ export const resultSummaryState = selector({
   key: "resultSummaryState",
   get: ({ get }) =>
     get(resultsState).reduce((ret: { [key: string]: number }, r) => {
-      const points: [string, number][] = [
-        [r.eastPlayerId, r.eastPoint],
-        [r.westPlayerId, r.westPoint],
-        [r.northPlayerId, r.northPoint],
-        [r.southPlayerId, r.southPoint],
-      ];
-      points.forEach(([playerId, point]) => {
-        if (!ret[playerId]) {
-          ret[playerId] = point;
+      Object.values(r.playerMap).forEach((p) => {
+        if (!ret[p.id]) {
+          ret[p.id] = p.point - r.startPoint + p.rankBonus + p.topPrize;
         } else {
-          ret[playerId] += point;
+          ret[p.id] += p.point - r.startPoint + p.rankBonus + p.topPrize;
         }
       });
       return ret;
