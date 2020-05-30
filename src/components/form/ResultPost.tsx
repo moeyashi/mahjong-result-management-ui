@@ -35,10 +35,9 @@ const ResultPost: FC = () => {
   const [values, setValues] = useState(initialValues);
   const [message, setMessage] = useState<string>();
 
-  const handleChangePlayer = (key: string): PlayerInputProps["onChange"] => (
-    _,
-    value
-  ) => {
+  const handleChangePlayer = (
+    key: string
+  ): PlayerInputProps["onInputChange"] => (_, value) => {
     setValues({ ...values, [key]: value });
   };
 
@@ -108,7 +107,7 @@ const ResultPost: FC = () => {
             <PlayerInput
               id="player1"
               value={values.player1}
-              onChange={handleChangePlayer("player1")}
+              onInputChange={handleChangePlayer("player1")}
               onKeyUp={(e) => handleKeyUp(e, "point1")}
               renderInput={(params): JSX.Element => (
                 <TextField {...params} label="player1" />
@@ -136,7 +135,7 @@ const ResultPost: FC = () => {
             <PlayerInput
               id="player2"
               value={values.player2}
-              onChange={handleChangePlayer("player2")}
+              onInputChange={handleChangePlayer("player2")}
               onKeyUp={(e) => handleKeyUp(e, "point2")}
               renderInput={(params): JSX.Element => (
                 <TextField {...params} label="player2" />
@@ -164,7 +163,7 @@ const ResultPost: FC = () => {
             <PlayerInput
               id="player3"
               value={values.player3}
-              onChange={handleChangePlayer("player3")}
+              onInputChange={handleChangePlayer("player3")}
               onKeyUp={(e) => handleKeyUp(e, "point3")}
               renderInput={(params): JSX.Element => (
                 <TextField {...params} label="player3" />
@@ -192,7 +191,7 @@ const ResultPost: FC = () => {
             <PlayerInput
               id="player4"
               value={values.player4}
-              onChange={handleChangePlayer("player4")}
+              onInputChange={handleChangePlayer("player4")}
               onKeyUp={(e) => handleKeyUp(e, "point4")}
               renderInput={(params): JSX.Element => (
                 <TextField {...params} label="player4" />
