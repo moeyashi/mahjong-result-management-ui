@@ -1,13 +1,12 @@
 import { useEffect } from "react";
-import { useSetRecoilState, useRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
 import {
-  groupState,
   groupIDState,
   playersState,
   resultsState,
-  loadingGroupState,
   loadingPlayersState,
   loadingResultsState,
+  groupState,
 } from "hooks/states/groupState";
 import Group from "models/Group";
 import firebase, { firestore } from "lib/firebase";
@@ -24,10 +23,9 @@ export const useSubscribe = (): void => {
   const setLoadingUser = useSetRecoilState(userLoadingState);
   const [uid, setUid] = useRecoilState(uidState);
   const [groupID, setGroupID] = useRecoilState(groupIDState);
+  const group = useRecoilValue(groupState);
   const setOwners = useSetRecoilState(ownerGroupsState);
   const setGuests = useSetRecoilState(guestGroupsState);
-  const setGroup = useSetRecoilState(groupState);
-  const setLoadingGroup = useSetRecoilState(loadingGroupState);
   const setPlayers = useSetRecoilState(playersState);
   const setLoadingPlayers = useSetRecoilState(loadingPlayersState);
   const setResults = useSetRecoilState(resultsState);
@@ -47,7 +45,8 @@ export const useSubscribe = (): void => {
         user.uid,
         "無名のグループ",
         user.uid,
-        []
+        [],
+        new Date()
       );
       if (!(await group.ref.get()).exists) {
         await group.create();
@@ -89,21 +88,6 @@ export const useSubscribe = (): void => {
     if (!groupID) {
       return;
     }
-    setLoadingGroup(true);
-    const unsubsc = firestore
-      .collection("groups")
-      .doc(groupID)
-      .onSnapshot((snap) => {
-        setGroup(Group.fromSnap(snap));
-        setLoadingGroup(false);
-      });
-    return () => unsubsc();
-  }, [groupID, setGroup, setLoadingGroup]);
-
-  useEffect(() => {
-    if (!groupID) {
-      return;
-    }
     setLoadingPlayers(true);
     const unsubsc = firestore
       .collection("groups")
@@ -117,19 +101,24 @@ export const useSubscribe = (): void => {
   }, [groupID, setPlayers, setLoadingPlayers]);
 
   useEffect(() => {
-    if (!groupID) {
+    if (!group) {
       return;
     }
     setLoadingResults(true);
     const unsubsc = firestore
       .collection("groups")
-      .doc(groupID)
+      .doc(group.id)
       .collection("results")
-      .orderBy("updatedAt")
+      .where(
+        "createdAt",
+        ">",
+        firebase.firestore.Timestamp.fromDate(group.resetDate)
+      )
+      .orderBy("createdAt")
       .onSnapshot((snap) => {
         setLoadingResults(false);
         setResults(snap.docs.map((doc) => Result.fromSnap(doc)));
       });
     return () => unsubsc();
-  }, [groupID, setResults, setLoadingResults]);
+  }, [group, setResults, setLoadingResults]);
 };

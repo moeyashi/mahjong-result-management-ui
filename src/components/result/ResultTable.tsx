@@ -15,15 +15,19 @@ import {
   resultPlayerNames,
   resultsState,
   resultSummaryState,
+  groupState,
 } from "hooks/states/groupState";
 import Result from "models/Result";
 import { FC } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilCallback } from "recoil";
 
 const ResultTable: FC = () => {
   const results = useRecoilValue(resultsState);
   const playerNames = useRecoilValue(resultPlayerNames);
   const sum = useRecoilValue(resultSummaryState);
+  const getGroup = useRecoilCallback(({ getPromise }) =>
+    getPromise(groupState)
+  );
 
   const handleDelete = (result: Result) => async (): Promise<void> => {
     if (!confirm("対局結果を削除しますか？")) {
@@ -32,12 +36,30 @@ const ResultTable: FC = () => {
     await result.delete();
   };
 
+  const handleClear = async (): Promise<void> => {
+    const group = await getGroup();
+    if (!group) {
+      alert("リセットに失敗");
+      return;
+    }
+    group.reset();
+  };
+
   return (
     <Card>
       <CardHeader
         title="結果"
         titleTypographyProps={{ variant: "h6" }}
         subheader="25000持ち30000返し、ウマ10-20（同点時入力順）"
+        action={
+          <Button
+            variant="outlined"
+            onClick={handleClear}
+            style={{ marginTop: 8 }}
+          >
+            reset
+          </Button>
+        }
         style={{ paddingTop: 8, paddingBottom: 8 }}
       />
       <CardContent style={{ paddingTop: 8, paddingBottom: 8 }}>
