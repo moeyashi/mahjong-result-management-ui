@@ -23,6 +23,10 @@ const initialValues = {
   point2: "",
   point3: "",
   point4: "",
+  extraPoint1: "0",
+  extraPoint2: "0",
+  extraPoint3: "0",
+  extraPoint4: "0",
 };
 
 const ResultPost: FC = () => {
@@ -68,7 +72,11 @@ const ResultPost: FC = () => {
       parseInt(values.point1),
       parseInt(values.point2),
       parseInt(values.point3),
-      parseInt(values.point4)
+      parseInt(values.point4),
+      parseInt(values.extraPoint1),
+      parseInt(values.extraPoint2),
+      parseInt(values.extraPoint3),
+      parseInt(values.extraPoint4)
     );
     setMessage(ng);
     if (!ng) {
@@ -78,6 +86,10 @@ const ResultPost: FC = () => {
         point2: initialValues.point2,
         point3: initialValues.point3,
         point4: initialValues.point4,
+        extraPoint1: initialValues.extraPoint1,
+        extraPoint2: initialValues.extraPoint2,
+        extraPoint3: initialValues.extraPoint3,
+        extraPoint4: initialValues.extraPoint4,
       });
     }
   };
@@ -92,7 +104,7 @@ const ResultPost: FC = () => {
       />
       <CardContent style={{ paddingTop: 8, paddingBottom: 8 }}>
         <Grid container spacing={1}>
-          <Grid item xs={6}>
+          <Grid item xs={5}>
             <PlayerInput
               id="player1"
               value={values.player1}
@@ -103,7 +115,7 @@ const ResultPost: FC = () => {
               )}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <PointInput
               id="point1"
               value={values.point1}
@@ -111,7 +123,16 @@ const ResultPost: FC = () => {
               onKeyUp={(e) => handleKeyUp(e, "player2")}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
+            <PointInput
+              id="extraPoint1"
+              label="トビ等"
+              helperText="着順影響なし"
+              value={values.extraPoint1}
+              onChange={handleChangePoint("extraPoint1")}
+            />
+          </Grid>
+          <Grid item xs={5}>
             <PlayerInput
               id="player2"
               value={values.player2}
@@ -122,7 +143,7 @@ const ResultPost: FC = () => {
               )}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <PointInput
               id="point2"
               value={values.point2}
@@ -130,7 +151,16 @@ const ResultPost: FC = () => {
               onKeyUp={(e) => handleKeyUp(e, "player3")}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
+            <PointInput
+              id="extraPoint2"
+              label="トビ等"
+              helperText="着順影響なし"
+              value={values.extraPoint2}
+              onChange={handleChangePoint("extraPoint2")}
+            />
+          </Grid>
+          <Grid item xs={5}>
             <PlayerInput
               id="player3"
               value={values.player3}
@@ -141,7 +171,7 @@ const ResultPost: FC = () => {
               )}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <PointInput
               id="point3"
               value={values.point3}
@@ -149,7 +179,16 @@ const ResultPost: FC = () => {
               onKeyUp={(e) => handleKeyUp(e, "player4")}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
+            <PointInput
+              id="extraPoint3"
+              label="トビ等"
+              helperText="着順影響なし"
+              value={values.extraPoint3}
+              onChange={handleChangePoint("extraPoint3")}
+            />
+          </Grid>
+          <Grid item xs={5}>
             <PlayerInput
               id="player4"
               value={values.player4}
@@ -160,12 +199,21 @@ const ResultPost: FC = () => {
               )}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <PointInput
               id="point4"
               value={values.point4}
               onChange={handleChangePoint("point4")}
               onKeyUp={(e) => handleKeyUp(e, "submitResult")}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <PointInput
+              id="extraPoint4"
+              label="トビ等"
+              helperText="着順影響なし"
+              value={values.extraPoint4}
+              onChange={handleChangePoint("extraPoint4")}
             />
           </Grid>
         </Grid>

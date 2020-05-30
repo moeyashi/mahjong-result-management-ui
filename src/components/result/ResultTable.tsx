@@ -70,7 +70,8 @@ const ResultTable: FC = () => {
                           : (
                               pMap[k].point +
                               pMap[k].rankBonus +
-                              pMap[k].topPrize -
+                              pMap[k].topPrize +
+                              pMap[k].extraPoint -
                               r.startPoint
                             ).toFixed(1)}
                       </TableCell>

@@ -63,9 +63,11 @@ export const resultSummaryState = selector({
     get(resultsState).reduce((ret: { [key: string]: number }, r) => {
       Object.values(r.playerMap).forEach((p) => {
         if (!ret[p.id]) {
-          ret[p.id] = p.point - r.startPoint + p.rankBonus + p.topPrize;
+          ret[p.id] =
+            p.point - r.startPoint + p.rankBonus + p.topPrize + p.extraPoint;
         } else {
-          ret[p.id] += p.point - r.startPoint + p.rankBonus + p.topPrize;
+          ret[p.id] +=
+            p.point - r.startPoint + p.rankBonus + p.topPrize + p.extraPoint;
         }
       });
       return ret;

@@ -16,7 +16,11 @@ export const useAddResult = () => {
       eastPoint: number,
       southPoint: number,
       westPoint: number,
-      northPoint: number
+      northPoint: number,
+      eastExtraPoint: number,
+      southExtraPoint: number,
+      westExtraPoint: number,
+      northExtraPoint: number
     ) => {
       const playerNames = new Set([
         eastPlayerName,
@@ -54,7 +58,11 @@ export const useAddResult = () => {
         round(eastPoint / 10, 1),
         round(westPoint / 10, 1),
         round(northPoint / 10, 1),
-        round(southPoint / 10, 1)
+        round(southPoint / 10, 1),
+        round(eastExtraPoint / 10, 1),
+        round(westExtraPoint / 10, 1),
+        round(northExtraPoint / 10, 1),
+        round(southExtraPoint / 10, 1)
       );
       const ng = result.validate();
       if (ng) {

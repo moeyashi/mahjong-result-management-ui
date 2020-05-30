@@ -5,6 +5,7 @@ const PointInput: FC<TextFieldProps> = ({ InputProps, ...props }) => (
   <TextField
     type="number"
     label="得点"
+    fullWidth
     InputProps={{
       endAdornment: <InputAdornment position="end">00</InputAdornment>,
       ...InputProps,

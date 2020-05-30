@@ -4,6 +4,7 @@ import { round } from "utils/round";
 export type PlayerResult = {
   id: string;
   point: number;
+  extraPoint: number;
   order: number;
   rankBonus: number;
   topPrize: number;
@@ -25,11 +26,16 @@ const initPlayerMap = (
   eastPoint: number,
   westPoint: number,
   northPoint: number,
-  southPoint: number
+  southPoint: number,
+  eastExtraPoint: number,
+  westExtraPoint: number,
+  northExtraPoint: number,
+  southExtraPoint: number
 ): PlayerMap => ({
   east: {
     id: eastPlayerId,
     point: eastPoint,
+    extraPoint: eastExtraPoint,
     order: 0,
     rankBonus: 0,
     topPrize: 0,
@@ -38,6 +44,7 @@ const initPlayerMap = (
   south: {
     id: southPlayerId,
     point: southPoint,
+    extraPoint: southExtraPoint,
     order: 0,
     rankBonus: 0,
     topPrize: 0,
@@ -46,6 +53,7 @@ const initPlayerMap = (
   west: {
     id: westPlayerId,
     point: westPoint,
+    extraPoint: westExtraPoint,
     order: 0,
     rankBonus: 0,
     topPrize: 0,
@@ -54,6 +62,7 @@ const initPlayerMap = (
   north: {
     id: northPlayerId,
     point: northPoint,
+    extraPoint: northExtraPoint,
     order: 0,
     rankBonus: 0,
     topPrize: 0,
@@ -81,6 +90,10 @@ export default class Result {
     public readonly westPoint: number,
     public readonly northPoint: number,
     public readonly southPoint: number,
+    public readonly eastExtraPoint: number,
+    public readonly westExtraPoint: number,
+    public readonly northExtraPoint: number,
+    public readonly southExtraPoint: number,
     // public //供託
     createdAt?: Date,
     updatedAt?: Date
@@ -97,7 +110,11 @@ export default class Result {
       eastPoint,
       westPoint,
       northPoint,
-      southPoint
+      southPoint,
+      eastExtraPoint,
+      westExtraPoint,
+      northExtraPoint,
+      southExtraPoint
     );
     Object.entries(playerMap)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -158,6 +175,10 @@ export default class Result {
       data.westPoint,
       data.northPoint,
       data.southPoint,
+      data.eastExtraPoint,
+      data.westExtraPoint,
+      data.northExtraPoint,
+      data.southExtraPoint,
       data.createdAt?.toDate(),
       data.updatedAt?.toDate()
     );
@@ -181,7 +202,11 @@ export default class Result {
       this.eastPoint * 1000 +
         this.westPoint * 1000 +
         this.southPoint * 1000 +
-        this.northPoint * 1000,
+        this.northPoint * 1000 +
+        this.eastExtraPoint * 1000 +
+        this.westExtraPoint * 1000 +
+        this.southExtraPoint * 1000 +
+        this.northExtraPoint * 1000,
       0
     );
     if (sum !== 100000) {
