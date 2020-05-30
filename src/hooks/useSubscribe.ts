@@ -1,5 +1,4 @@
-import React, { FC, ReactNode, useEffect } from "react";
-import Header from "./Header";
+import { useEffect } from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import {
   groupState,
@@ -14,10 +13,17 @@ import Group from "models/Group";
 import firebase, { firestore } from "lib/firebase";
 import Player from "models/Player";
 import Result from "models/Result";
-import { Login } from "./Login";
+import {
+  uidState,
+  ownerGroupsState,
+  guestGroupsState,
+} from "./states/userState";
 
-const App: FC<{ children: ReactNode }> = ({ children }) => {
+export const useSubscribe = (): void => {
+  const [uid, setUid] = useRecoilState(uidState);
   const [groupID, setGroupID] = useRecoilState(groupIDState);
+  const setOwners = useSetRecoilState(ownerGroupsState);
+  const setGuests = useSetRecoilState(guestGroupsState);
   const setGroup = useSetRecoilState(groupState);
   const setLoadingGroup = useSetRecoilState(loadingGroupState);
   const setPlayers = useSetRecoilState(playersState);
@@ -28,6 +34,7 @@ const App: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
       if (!user) {
+        setUid("");
         setGroupID("");
         return;
       }
@@ -43,9 +50,36 @@ const App: FC<{ children: ReactNode }> = ({ children }) => {
         await group.create();
       }
       setGroupID(user.uid);
+      setUid(user.uid);
     });
     return () => unsubscribe();
-  }, [setGroupID]);
+  }, [setUid, setGroupID]);
+
+  useEffect(() => {
+    if (!uid) {
+      return;
+    }
+    const unsubsc = firestore
+      .collection("groups")
+      .where("ownerUid", "==", uid)
+      .onSnapshot((snap) => {
+        setOwners(snap.docs.map((doc) => Group.fromSnap(doc)));
+      });
+    return () => unsubsc();
+  }, [uid, setOwners]);
+
+  useEffect(() => {
+    if (!uid) {
+      return;
+    }
+    const unsubsc = firestore
+      .collection("groups")
+      .where("guestUid", "array-contains", uid)
+      .onSnapshot((snap) => {
+        setGuests(snap.docs.map((doc) => Group.fromSnap(doc)));
+      });
+    return () => unsubsc();
+  }, [uid, setGuests]);
 
   useEffect(() => {
     if (!groupID) {
@@ -94,13 +128,4 @@ const App: FC<{ children: ReactNode }> = ({ children }) => {
       });
     return () => unsubsc();
   }, [groupID, setResults, setLoadingResults]);
-
-  return (
-    <main>
-      <Header />
-      {groupID ? children : <Login />}
-    </main>
-  );
 };
-
-export default App;

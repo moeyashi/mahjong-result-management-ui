@@ -16,7 +16,10 @@ export default class Group {
     >,
     public readonly id: string,
     public readonly name: string = "",
-    public readonly ownerUid: string
+    public readonly ownerUid: string,
+    public guestUids: string[],
+    public inviteParam: string = "",
+    public inviteParamExpiration: Date = new Date(1900, 0, 1)
   ) {
     this.players = ref.collection("players");
     this.results = ref.collection("results");
@@ -33,12 +36,23 @@ export default class Group {
   public async create(): Promise<void> {
     await this.ref.set({
       ownerUid: this.ownerUid,
+      guestUids: this.guestUids,
+      inviteParam: this.inviteParam,
+      inviteParamExpiration: this.inviteParamExpiration,
     });
   }
 
   public static fromSnap(snap: firebase.firestore.DocumentSnapshot): Group {
     const d = snap.data();
-    const ret = new Group(snap.ref, snap.id, d?.name, d?.ownerUid);
+    const ret = new Group(
+      snap.ref,
+      snap.id,
+      d?.name,
+      d?.ownerUid,
+      d?.guestUids,
+      d?.inviteParam,
+      d?.inviteParamExpiration
+    );
     return ret;
   }
 
