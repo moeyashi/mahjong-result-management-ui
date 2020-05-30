@@ -17,9 +17,11 @@ import {
   uidState,
   ownerGroupsState,
   guestGroupsState,
+  userLoadingState,
 } from "./states/userState";
 
 export const useSubscribe = (): void => {
+  const setLoadingUser = useSetRecoilState(userLoadingState);
   const [uid, setUid] = useRecoilState(uidState);
   const [groupID, setGroupID] = useRecoilState(groupIDState);
   const setOwners = useSetRecoilState(ownerGroupsState);
@@ -36,6 +38,7 @@ export const useSubscribe = (): void => {
       if (!user) {
         setUid("");
         setGroupID("");
+        setLoadingUser(false);
         return;
       }
 
@@ -51,9 +54,10 @@ export const useSubscribe = (): void => {
       }
       setGroupID(user.uid);
       setUid(user.uid);
+      setLoadingUser(false);
     });
     return () => unsubscribe();
-  }, [setUid, setGroupID]);
+  }, [setLoadingUser, setUid, setGroupID]);
 
   useEffect(() => {
     if (!uid) {

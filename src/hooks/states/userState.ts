@@ -1,6 +1,11 @@
 import { atom } from "recoil";
 import Group from "models/Group";
 
+export const userLoadingState = atom({
+  key: "userLoadingState",
+  default: true,
+});
+
 export const uidState = atom({
   key: "uidState",
   default: "",
