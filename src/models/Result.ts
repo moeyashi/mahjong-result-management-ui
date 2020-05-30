@@ -139,6 +139,10 @@ export default class Result {
     await this.ref.set(this.documentData());
   }
 
+  public async delete(): Promise<void> {
+    await this.ref.delete();
+  }
+
   public static fromSnap(snap: firebase.firestore.DocumentSnapshot): Result {
     const data = snap.data() || {};
     const ret = new Result(

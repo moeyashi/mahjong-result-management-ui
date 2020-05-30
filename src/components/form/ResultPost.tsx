@@ -87,7 +87,7 @@ const ResultPost: FC = () => {
       <CardHeader
         title="結果追加"
         titleTypographyProps={{ variant: "h6" }}
-        subheader="得点は素点を入力"
+        subheader="得点は素点を入力。同点時の着順は入力順。"
         style={{ paddingTop: 8, paddingBottom: 8 }}
       />
       <CardContent style={{ paddingTop: 8, paddingBottom: 8 }}>

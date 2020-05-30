@@ -1,37 +1,33 @@
-import { FC } from "react";
 import {
-  Table,
-  TableContainer,
-  TableHead,
-  TableCell,
-  TableBody,
-  TableRow,
-  Card,
-  CardHeader,
-  CardContent,
   Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableFooter,
+  TableHead,
+  TableRow,
 } from "@material-ui/core";
-import { useRecoilValue } from "recoil";
 import {
   groupState,
+  resultPlayerNames,
   resultsState,
   resultSummaryState,
-  resultPlayerNames,
 } from "hooks/states/groupState";
+import Result from "models/Result";
+import { FC } from "react";
+import { useRecoilValue } from "recoil";
 
 const ResultTable: FC = () => {
-  const group = useRecoilValue(groupState);
   const results = useRecoilValue(resultsState);
   const playerNames = useRecoilValue(resultPlayerNames);
   const sum = useRecoilValue(resultSummaryState);
 
-  const handleClear = async (): Promise<void> => {
-    if (!group) {
-      alert("クリアに失敗");
-      return;
-    }
-    group.reset();
+  const handleDelete = (result: Result) => async (): Promise<void> => {
+    await result.delete();
   };
 
   return (
@@ -40,15 +36,6 @@ const ResultTable: FC = () => {
         title="結果"
         titleTypographyProps={{ variant: "h6" }}
         subheader="25000持ち30000返し、ウマ10-20（同点時入力順）"
-        action={
-          <Button
-            variant="outlined"
-            onClick={handleClear}
-            style={{ marginTop: 8 }}
-          >
-            clear
-          </Button>
-        }
         style={{ paddingTop: 8, paddingBottom: 8 }}
       />
       <CardContent style={{ paddingTop: 8, paddingBottom: 8 }}>
@@ -61,6 +48,7 @@ const ResultTable: FC = () => {
                     {v} : {sum[k]?.toFixed(1)}
                   </TableCell>
                 ))}
+                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -85,6 +73,9 @@ const ResultTable: FC = () => {
                             ).toFixed(1)}
                       </TableCell>
                     ))}
+                    <TableCell>
+                      <Button onClick={handleDelete(r)}>delete</Button>
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -94,6 +85,7 @@ const ResultTable: FC = () => {
                 {Object.keys(playerNames).map((k) => (
                   <TableCell key={k}>{sum[k]?.toFixed(1)}</TableCell>
                 ))}
+                <TableCell></TableCell>
               </TableRow>
             </TableFooter>
           </Table>
