@@ -149,6 +149,10 @@ export default class Result {
       westPoint: this.westPoint,
       northPoint: this.northPoint,
       southPoint: this.southPoint,
+      eastExtraPoint: this.eastExtraPoint,
+      westExtraPoint: this.westExtraPoint,
+      northExtraPoint: this.northExtraPoint,
+      southExtraPoint: this.southExtraPoint,
     };
   }
 
