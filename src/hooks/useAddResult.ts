@@ -2,6 +2,7 @@ import { useRecoilCallback } from "recoil";
 import { resultsState, groupState, playersState } from "./states/groupState";
 import Result from "models/Result";
 import { firestore } from "lib/firebase";
+import { round } from "utils/round";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useAddResult = () => {
@@ -50,10 +51,10 @@ export const useAddResult = () => {
         westPlayer.player.id,
         northPlayer.player.id,
         southPlayer.player.id,
-        eastPoint,
-        westPoint,
-        northPoint,
-        southPoint
+        round(eastPoint / 10, 1),
+        round(westPoint / 10, 1),
+        round(northPoint / 10, 1),
+        round(southPoint / 10, 1)
       );
       const ng = result.validate();
       if (ng) {

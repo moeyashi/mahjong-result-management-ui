@@ -1,4 +1,5 @@
 import firebase from "lib/firebase";
+import { round } from "utils/round";
 
 export type PlayerResult = {
   id: string;
@@ -172,10 +173,15 @@ export default class Result {
     if (playerIds.size !== 4) {
       return "プレイヤー名が重複しています";
     }
-    const sum =
-      this.eastPoint + this.westPoint + this.southPoint + this.northPoint;
-    if (sum !== 100) {
-      return "合計得点が100になりません。" + sum;
+    const sum = round(
+      this.eastPoint * 1000 +
+        this.westPoint * 1000 +
+        this.southPoint * 1000 +
+        this.northPoint * 1000,
+      0
+    );
+    if (sum !== 100000) {
+      return "合計得点が100000になりません。" + sum;
     }
     return "";
   }

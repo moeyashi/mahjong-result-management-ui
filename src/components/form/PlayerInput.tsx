@@ -4,6 +4,10 @@ import { FC } from "react";
 import { useRecoilValue } from "recoil";
 import { playersState, loadingPlayersState } from "hooks/states/groupState";
 
+export type PlayerInputProps = Partial<
+  AutocompleteProps<string, undefined, undefined, boolean>
+>;
+
 const PlayerInput: FC<Partial<
   AutocompleteProps<string, undefined, undefined, boolean>
 >> = (props) => {
