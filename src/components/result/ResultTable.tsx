@@ -12,7 +12,6 @@ import {
   TableRow,
 } from "@material-ui/core";
 import {
-  groupState,
   resultPlayerNames,
   resultsState,
   resultSummaryState,
@@ -27,6 +26,9 @@ const ResultTable: FC = () => {
   const sum = useRecoilValue(resultSummaryState);
 
   const handleDelete = (result: Result) => async (): Promise<void> => {
+    if (!confirm("対局結果を削除しますか？")) {
+      return;
+    }
     await result.delete();
   };
 
