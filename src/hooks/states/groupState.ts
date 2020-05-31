@@ -2,7 +2,7 @@ import Group from "models/Group";
 import Player from "models/Player";
 import Result from "models/Result";
 import { atom, selector } from "recoil";
-import { ownerGroupsState, guestGroupsState } from "./userState";
+import { ownerGroupsState, guestGroupsState, uidState } from "./userState";
 
 export const groupIDState = atom({
   key: "groupIDState",
@@ -14,7 +14,29 @@ export const groupState = selector<Group | undefined>({
   get: ({ get }) =>
     get(ownerGroupsState).find((g) => g.id === get(groupIDState)) ||
     get(guestGroupsState).find((g) => g.id === get(groupIDState)),
+  set: ({ set }, group) => {
+    if (!group) {
+      set(groupIDState, "");
+      return;
+    }
+    if ("id" in group) {
+      set(groupIDState, group.id);
+      return;
+    }
+    set(groupIDState, "");
+  },
   dangerouslyAllowMutability: true,
+});
+
+export const isOwnerGroupState = selector({
+  key: "isOwnerGroupState",
+  get: ({ get }) => {
+    const group = get(groupState);
+    if (!group) {
+      return false;
+    }
+    return group.ownerUid === get(uidState);
+  },
 });
 
 export const playersState = atom<Player[]>({

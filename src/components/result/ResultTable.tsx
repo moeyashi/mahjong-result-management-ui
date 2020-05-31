@@ -16,12 +16,14 @@ import {
   resultsState,
   resultSummaryState,
   groupState,
+  isOwnerGroupState,
 } from "hooks/states/groupState";
 import Result from "models/Result";
 import { FC } from "react";
 import { useRecoilValue, useRecoilCallback } from "recoil";
 
 const ResultTable: FC = () => {
+  const isOwner = useRecoilValue(isOwnerGroupState);
   const results = useRecoilValue(resultsState);
   const playerNames = useRecoilValue(resultPlayerNames);
   const sum = useRecoilValue(resultSummaryState);
@@ -52,13 +54,15 @@ const ResultTable: FC = () => {
         titleTypographyProps={{ variant: "h6" }}
         subheader="25000持ち30000返し、ウマ10-20（同点時入力順）"
         action={
-          <Button
-            variant="outlined"
-            onClick={handleClear}
-            style={{ marginTop: 8 }}
-          >
-            reset
-          </Button>
+          isOwner && (
+            <Button
+              variant="outlined"
+              onClick={handleClear}
+              style={{ marginTop: 8 }}
+            >
+              reset
+            </Button>
+          )
         }
         style={{ paddingTop: 8, paddingBottom: 8 }}
       />
@@ -99,7 +103,9 @@ const ResultTable: FC = () => {
                       </TableCell>
                     ))}
                     <TableCell>
-                      <Button onClick={handleDelete(r)}>delete</Button>
+                      {isOwner && (
+                        <Button onClick={handleDelete(r)}>delete</Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 );

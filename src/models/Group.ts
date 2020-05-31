@@ -36,6 +36,7 @@ export default class Group {
 
   public async create(): Promise<void> {
     await this.ref.set({
+      name: this.name,
       ownerUid: this.ownerUid,
       guestUids: this.guestUids,
       inviteParam: this.inviteParam,
