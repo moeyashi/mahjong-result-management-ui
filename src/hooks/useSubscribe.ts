@@ -77,7 +77,7 @@ export const useSubscribe = (): void => {
     }
     const unsubsc = firestore
       .collection("groups")
-      .where("guestUid", "array-contains", uid)
+      .where("guestUids", "array-contains", uid)
       .onSnapshot((snap) => {
         setGuests(snap.docs.map((doc) => Group.fromSnap(doc)));
       });

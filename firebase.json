@@ -4,8 +4,16 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
+        "source": "/join-group",
+        "destination": "/join-group.html"
+      },
+      {
+        "source": "/members",
+        "destination": "/members.html"
+      },
+      {
         "source": "**",
-        "function": "index.html"
+        "destination": "index.html"
       }
     ]
   }

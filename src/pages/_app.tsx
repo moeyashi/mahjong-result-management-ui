@@ -1,10 +1,12 @@
-import React, { FC } from "react";
-import Head from "next/head";
-import { AppProps } from "next/app";
-import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import theme from "../theme";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { AppProps } from "next/app";
+import Head from "next/head";
+import { SnackbarProvider } from "notistack";
+import React, { FC } from "react";
 import { RecoilRoot } from "recoil";
+
+import theme from "../theme";
 
 const MyApp: FC<AppProps> = (props) => {
   const { Component, pageProps } = props;
@@ -35,9 +37,11 @@ const MyApp: FC<AppProps> = (props) => {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <RecoilRoot>
-          <Component {...pageProps} />
-        </RecoilRoot>
+        <SnackbarProvider>
+          <RecoilRoot>
+            <Component {...pageProps} />
+          </RecoilRoot>
+        </SnackbarProvider>
       </ThemeProvider>
     </React.Fragment>
   );

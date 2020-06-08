@@ -47,7 +47,7 @@ export const useAddResult = () => {
       ];
       const [eastPlayer, westPlayer, northPlayer, southPlayer] = ps;
       const result = new Result(
-        group.results.doc(),
+        group.results().doc(),
         25,
         5,
         [20, 10, -10, -20],

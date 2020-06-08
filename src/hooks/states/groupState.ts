@@ -3,6 +3,7 @@ import Player from "models/Player";
 import Result from "models/Result";
 import { atom, selector } from "recoil";
 import { ownerGroupsState, guestGroupsState, uidState } from "./userState";
+import { GroupMember } from "models/GroupMember";
 
 export const groupIDState = atom({
   key: "groupIDState",
@@ -97,4 +98,12 @@ export const resultSummaryState = selector({
 export const loadingResultsState = atom({
   key: "loadingResultsState",
   default: true,
+});
+
+export const groupMembersAsyncState = selector({
+  key: "groupMembersState",
+  get: async ({ get }) =>
+    (await get(groupState)?.members().get())?.docs.map(GroupMember.fromSnap) ||
+    [],
+  dangerouslyAllowMutability: true,
 });
